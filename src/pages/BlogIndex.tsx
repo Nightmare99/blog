@@ -14,25 +14,33 @@ const fadeUp = {
   show: { opacity: 1, y: 0 },
 }
 
+function Helix({ className }: { className?: string }) {
+  return (
+    <div className={className}>
+      <Suspense fallback={null}>
+        <DnaHelix />
+      </Suspense>
+    </div>
+  )
+}
+
 export function BlogIndex() {
   const isDesktop = useMediaQuery("(min-width: 1024px)")
   const latest = posts[0]
 
   return (
-    <>
-      <section className="relative overflow-hidden pb-8 pt-10 md:pt-16">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-signal-teal/10 blur-[110px]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-32 top-40 h-[320px] w-[320px] rounded-full bg-signal-violet/10 blur-[100px]"
-        />
+    <div className="relative">
+      {/* Ambient background — fixed to the viewport so the same atmosphere
+          carries the whole page, not just the top of it. */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-signal-teal/10 blur-[100px] md:h-[420px] md:w-[420px] md:blur-[110px]" />
+        <div className="absolute -left-24 bottom-0 h-64 w-64 rounded-full bg-signal-violet/10 blur-[90px] md:h-[320px] md:w-[320px] md:blur-[100px]" />
+      </div>
 
-        <div className="container relative mx-auto px-4 md:px-8 lg:px-16">
-          <div className="grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-[1.3fr_1fr]">
-            {/* Left: identity */}
+      <section className="relative py-10 md:py-16">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.3fr_1fr] lg:items-start lg:gap-16">
+            {/* Left column: identity + full entry list */}
             <div>
               <motion.div
                 initial="hidden"
@@ -81,82 +89,88 @@ export function BlogIndex() {
                   indexed · latest {formatDate(latest.meta.date)}
                 </span>
               </motion.div>
+
+              {/* Helix, inline, mobile/tablet only */}
+              {!isDesktop && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1, delay: 0.3 }}
+                  className="-mx-4 mt-4 h-64 sm:mx-0 sm:h-72"
+                >
+                  <Helix className="h-full w-full" />
+                </motion.div>
+              )}
+
+              <div className="mt-12 flex flex-col gap-4">
+                {posts.map((post, index) => (
+                  <motion.div
+                    key={post.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.5, delay: index * 0.06 }}
+                  >
+                    <Link
+                      to={`/${post.slug}`}
+                      className="panel panel-hover group block p-6 transition-transform duration-300 hover:-translate-y-0.5"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-faint">
+                            <span
+                              className={cn(
+                                "flex items-center gap-1.5",
+                                CATEGORY_COLOR[post.meta.category]
+                              )}
+                            >
+                              <span className="status-dot" />
+                              {post.meta.category}
+                            </span>
+                            <span>{formatDate(post.meta.date)}</span>
+                            <span>·</span>
+                            <span>{post.meta.readTime}</span>
+                            <span className="ml-auto text-ink-faint">
+                              #{String(post.seq).padStart(3, "0")}
+                            </span>
+                          </div>
+                          <h2 className="mt-2 flex items-center gap-2 text-lg font-semibold text-ink transition-colors group-hover:text-signal-teal">
+                            {post.meta.title}
+                            <ArrowRight className="h-4 w-4 shrink-0 -translate-x-1 text-signal-teal opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+                          </h2>
+                          <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
+                            {post.meta.excerpt}
+                          </p>
+                          <div className="mt-4 flex flex-wrap gap-1.5">
+                            {post.meta.tags.map((tag) => (
+                              <Badge key={tag} variant="secondary">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
-            {/* Right: ambient signature — hidden below lg, and only fetched
-                (code-split) once the viewport actually qualifies. */}
+            {/* Right column: helix, desktop only, stays in view while the
+                left column scrolls past it. */}
             {isDesktop && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="hidden h-[420px] w-full lg:block"
+                className="sticky top-24 h-[520px] w-full"
               >
-                <Suspense fallback={null}>
-                  <DnaHelix />
-                </Suspense>
+                <Helix className="h-full w-full" />
               </motion.div>
             )}
           </div>
         </div>
       </section>
-
-      <section className="pb-24 pt-4 md:pt-8">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16">
-          <div className="flex max-w-4xl flex-col gap-4">
-            {posts.map((post, index) => (
-              <motion.div
-                key={post.slug}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, delay: index * 0.06 }}
-              >
-                <Link
-                  to={`/${post.slug}`}
-                  className="panel panel-hover group block p-6 transition-transform duration-300 hover:-translate-y-0.5"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-faint">
-                        <span
-                          className={cn(
-                            "flex items-center gap-1.5",
-                            CATEGORY_COLOR[post.meta.category]
-                          )}
-                        >
-                          <span className="status-dot" />
-                          {post.meta.category}
-                        </span>
-                        <span>{formatDate(post.meta.date)}</span>
-                        <span>·</span>
-                        <span>{post.meta.readTime}</span>
-                        <span className="ml-auto text-ink-faint">
-                          #{String(post.seq).padStart(3, "0")}
-                        </span>
-                      </div>
-                      <h2 className="mt-2 flex items-center gap-2 text-lg font-semibold text-ink transition-colors group-hover:text-signal-teal">
-                        {post.meta.title}
-                        <ArrowRight className="h-4 w-4 shrink-0 -translate-x-1 text-signal-teal opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
-                      </h2>
-                      <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
-                        {post.meta.excerpt}
-                      </p>
-                      <div className="mt-4 flex flex-wrap gap-1.5">
-                        {post.meta.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+    </div>
   )
 }

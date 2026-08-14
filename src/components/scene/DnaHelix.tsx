@@ -96,7 +96,7 @@ function Helix() {
 export default function DnaHelix() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 6.2], fov: 42 }}
+      camera={{ position: [0, 0, 7.4], fov: 42 }}
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 1.5]}
     >
