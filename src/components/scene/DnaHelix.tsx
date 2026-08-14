@@ -50,7 +50,7 @@ function Helix() {
   })
 
   return (
-    <group rotation={[0.45, 0, 0.2]}>
+    <group rotation={[0.3, 0, 0.15]}>
       <group ref={group}>
         {strandA.map((p, i) => (
           <mesh key={`a-${i}`} position={p}>
@@ -96,7 +96,7 @@ function Helix() {
 export default function DnaHelix() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 7.4], fov: 42 }}
+      camera={{ position: [0, 0, 8.6], fov: 40 }}
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 1.5]}
     >

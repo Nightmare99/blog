@@ -35,6 +35,18 @@ export function BlogIndex() {
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-signal-teal/10 blur-[100px] md:h-[420px] md:w-[420px] md:blur-[110px]" />
         <div className="absolute -left-24 bottom-0 h-64 w-64 rounded-full bg-signal-violet/10 blur-[90px] md:h-[320px] md:w-[320px] md:blur-[100px]" />
+        {/* Helix as ambient backdrop on small screens — sits behind the
+            content column rather than taking its own block in the flow. */}
+        {!isDesktop && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.35 }}
+            transition={{ duration: 1.2, delay: 0.3 }}
+            className="absolute inset-0"
+          >
+            <Helix className="h-full w-full" />
+          </motion.div>
+        )}
       </div>
 
       <section className="relative py-10 md:py-16">
@@ -89,18 +101,6 @@ export function BlogIndex() {
                   indexed · latest {formatDate(latest.meta.date)}
                 </span>
               </motion.div>
-
-              {/* Helix, inline, mobile/tablet only */}
-              {!isDesktop && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1, delay: 0.3 }}
-                  className="-mx-4 mt-4 h-64 sm:mx-0 sm:h-72"
-                >
-                  <Helix className="h-full w-full" />
-                </motion.div>
-              )}
 
               <div className="mt-12 flex flex-col gap-4">
                 {posts.map((post, index) => (
