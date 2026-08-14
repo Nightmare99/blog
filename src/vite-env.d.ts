@@ -2,14 +2,8 @@
 
 declare module '*.mdx' {
   import type { ComponentType } from 'react'
-  export const meta: {
-    title: string
-    date: string
-    excerpt: string
-    tags: string[]
-    category: 'engineering' | 'notes' | 'career'
-    readTime: string
-  }
+  import type { PostMeta } from '@/lib/posts'
+  export const meta: PostMeta
   const MDXComponent: ComponentType
   export default MDXComponent
 }

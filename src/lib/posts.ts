@@ -1,6 +1,6 @@
 import type { ComponentType } from "react"
 
-export type Category = "engineering" | "notes" | "career"
+export type Category = "engineering" | "notes" | "career" | "personal"
 
 export interface PostMeta {
   title: string
@@ -48,6 +48,7 @@ export const CATEGORY_COLOR: Record<Category, string> = {
   engineering: "text-signal-teal",
   notes: "text-signal-blue",
   career: "text-signal-amber",
+  personal: "text-signal-violet",
 }
 
 export function formatDate(iso: string): string {

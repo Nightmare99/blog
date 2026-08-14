@@ -51,8 +51,8 @@ export function BlogIndex() {
             System log
           </h1>
           <p className="mt-3 text-ink-muted">
-            Notes from building and shipping things — engineering write-ups,
-            observations, and the occasional postmortem.
+            Engineering write-ups, career notes, and the occasional personal
+            entry — everything logged in one place, timestamped and tagged.
           </p>
         </div>
 
