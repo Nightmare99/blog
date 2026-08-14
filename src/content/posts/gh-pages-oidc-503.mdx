@@ -1,0 +1,49 @@
+export const meta = {
+  title: "Why my GitHub Pages deploy failed (and it wasn't my fault)",
+  date: "2026-07-10",
+  excerpt:
+    "A deploy step failed with a scary permissions error that pointed nowhere useful. The real cause was a 503 from GitHub's own OIDC token service.",
+  tags: ["github-actions", "ci-cd", "postmortem"],
+  category: "engineering",
+  readTime: "3 min read",
+}
+
+The `Deploy to GitHub Pages` workflow for this site has three jobs' worth of history: build, upload the artifact, deploy. It had been green for weeks. Then one push, the deploy job failed with this:
+
+```
+Error: Error message: Failed to get ID Token.
+
+    Error Code : 503
+    Error Message: upstream connect error or disconnect/reset before headers. reset reason: overflow
+
+##[error]Ensure GITHUB_TOKEN has permission "id-token: write".
+```
+
+That last line is doing a lot of unearned confidence. It reads like a config problem — go check your permissions block — so that's where I looked first.
+
+## The red herring
+
+The workflow already had this at the top level:
+
+```yaml
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+```
+
+Permissions declared at the workflow level apply to every job, including the `deploy` job that calls `actions/deploy-pages@v4`. There was nothing to fix here. The action's own error message names the exact permission that was, in fact, already granted — it's just a generic fallback string the action prints whenever token retrieval fails for *any* reason, not specifically a missing scope.
+
+## The actual cause
+
+Above that misleading line is the real error: **503, upstream connect error, reset reason: overflow.** That's not coming from my workflow at all — it's GitHub's OIDC token-issuing endpoint refusing the connection, almost certainly a transient capacity blip on GitHub's infrastructure at the moment `deploy-pages` tried to mint a token to authenticate the deployment. `deploy-pages` needs a short-lived OIDC token to prove to the Pages API that the deployment is coming from an authorized workflow run; if the token service itself is unreachable, the step fails before it ever gets to check what the token's permissions would have been.
+
+## The fix was to not fix anything
+
+Once I traced it to GitHub's side, the response was simple: re-run the job. `gh run rerun <run-id>` (or, once a run is old enough that GitHub won't let you rerun it, `gh workflow run deploy.yml` to trigger a fresh dispatch). No file changed. The second attempt reached the OIDC endpoint fine and deployed cleanly in under a minute.
+
+## Worth remembering
+
+- A `##[error]` line naming a specific permission doesn't guarantee that permission is the actual cause — trace the error above it before touching config.
+- A single 5xx from an upstream identity/token service is usually not worth a retry loop in the workflow itself; it's rare enough that a manual re-run when it happens is cheaper than adding retry logic that will sit unused 99% of the time.
+- `gh run view <id> --log-failed` is the fastest way to skip straight to the lines that matter instead of scrolling a full Actions log in the browser.

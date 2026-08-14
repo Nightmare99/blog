@@ -1,0 +1,29 @@
+export const meta = {
+  title: "Notes on shipping an agentic reporting platform at scale",
+  date: "2026-08-01",
+  excerpt:
+    "Lessons from building a chatbot on top of a BI tool: narrow tools beat clever prompts, and the agent's job is to pick the right query, not write one from scratch.",
+  tags: ["fastmcp", "pydantic-ai", "agents"],
+  category: "career",
+  readTime: "5 min read",
+}
+
+We built a reporting platform meant to replace a chunk of what people were using Tableau and Power BI for internally, then added a conversational layer on top so people could ask for a report instead of building one. The tool side is FastAPI and FastMCP; the reasoning side is PydanticAI. A few things about that project generalized further than I expected.
+
+## The agent's job is to choose, not to write
+
+The instinct when you add a chatbot to a data tool is to let it write SQL. We tried that early on and rolled it back. Free-form query generation against real production schemas means every response is one bad join away from either a wrong number or a very expensive one — and "wrong number" in a reporting tool is worse than no number, because it *looks* authoritative.
+
+What worked instead: a fixed catalog of parameterized report queries, each exposed as its own narrow MCP tool with a tight schema — `get_regional_sales(region, quarter)`, not `run_query(sql)`. The model's actual job became picking the right tool and filling in parameters from the conversation, not authoring logic. That's a much smaller trust surface. It also made the system's behavior legible to the people who had to sign off on it — you can read a list of forty tool definitions and know the full space of what the agent can do, which you cannot do with "it writes SQL."
+
+## Latency budget is a design constraint, not an afterthought
+
+A human clicking through a BI dashboard tolerates a few seconds per interaction without thinking about it. A person typing a question into a chat box has a much shorter patience window before they assume something's broken — probably because chat interfaces have trained everyone on near-instant replies. That meant the tool layer needed p95 latency numbers, not just correctness, as a design constraint from day one. Report queries that were fine as scheduled BigQuery jobs needed rework — materialized aggregates, tighter partitioning — once they were sitting in the middle of a synchronous chat turn.
+
+## The fallback path matters more than the happy path
+
+Most of the debugging time on this project went into what happens when the agent picks a tool but the parameters don't resolve cleanly — an ambiguous date range, a region name that doesn't match the catalog, a quarter that has no data yet. The naive failure mode is a stack trace laundered into a vague "something went wrong." The fix wasn't cleverer error handling in the traditional sense; it was making tool schemas return structured, agent-readable errors ("no data for Q3 2026 in APAC — data available through Q2") so the model could relay something specific back to the person instead of guessing or apologizing.
+
+## What generalized
+
+The micro-frontend split — a shell that owns auth and layout, independently deployed report modules — turned out to be orthogonal to the agent work and would've been the right call with or without a chatbot attached. The agent-specific lesson that traveled with me to the next project: **spend your design effort on the tool boundary, not the prompt.** A well-scoped tool with a narrow schema will out-perform a cleverly-worded system prompt sitting in front of a wide-open one, every time, and it's the part you can actually unit test.
