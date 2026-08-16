@@ -20,8 +20,8 @@ export const meta = {
   title: "Why my GitHub Pages deploy failed (and it wasn't my fault)",
   date: "2026-07-10",              // ISO yyyy-mm-dd. Drives ordering.
   excerpt: "One or two sentences shown on the index card and in previews.",
-  tags: ["github-actions", "ci-cd", "postmortem"],
-  category: "engineering",          // see categories below
+  tags: ["github-actions", "ci-cd", "postmortem"],   // free-form, unlimited
+  categories: ["engineering"],      // controlled vocabulary, see below — can have more than one
   readTime: "3 min read",           // rough eyeball: ~200 words/min
 }
 ```
@@ -29,11 +29,14 @@ export const meta = {
 The full type is in `src/lib/posts.ts` (`PostMeta`) — that file is the
 source of truth if this doc and the code ever disagree.
 
-### Categories
+`tags` and `categories` are different things: `tags` is free-form (any
+string, as many as make sense — `"github-actions"`, `"ci-cd"`, whatever
+the post is actually about). `categories` is a small, fixed, color-coded
+vocabulary the index's category filter is built on — you can list more
+than one, but don't invent new ones without also adding a color for them
+in `CATEGORY_COLOR` and `CATEGORY_CHIP_ACTIVE` in `src/lib/posts.ts`.
 
-Each maps to a signal color from the site's palette (`tailwind.config.js`).
-Pick whichever fits the entry; don't invent new categories without adding
-a color for them in `CATEGORY_COLOR` in `src/lib/posts.ts`.
+### Categories
 
 | category      | color   | for |
 |---------------|---------|-----|
@@ -42,9 +45,23 @@ a color for them in `CATEGORY_COLOR` in `src/lib/posts.ts`.
 | `career`      | amber   | work reflections, project retrospectives, lessons from a role |
 | `personal`    | violet  | updates, feelings, memories — non-work entries |
 
+Most posts should have exactly one. Give a post two only when it
+genuinely straddles both — e.g. `["career", "personal"]` for a reflection
+that's really about how a project affected you personally — not as a way
+to get more visibility in each filter.
+
 Posts don't need to be sequenced or numbered — `seq` is assigned
 automatically from `date`, oldest first, and the index displays newest
 first. You only ever need to set `date`; ordering takes care of itself.
+
+### Search, filter, pagination
+
+All three are handled by the index page automatically (`src/hooks/usePostFilters.ts`)
+— nothing to configure per post. Search matches `title`, `excerpt`, and
+`tags`; the category chips filter on `categories`; the list paginates at
+6 posts per page. The one thing that affects how well a post surfaces
+there is writing an accurate `excerpt` and a few real `tags` — both are
+part of what search matches against.
 
 ## 3. Body
 
@@ -98,7 +115,7 @@ nothing else to do.
 Given a list of raw points (what happened, what was learned, how it felt),
 turn them into a post by:
 
-1. Picking the right `category` from the table above.
+1. Picking the right `categories` (usually just one) from the table above.
 2. Writing a title that states the actual takeaway, not a vague topic
    label (`"Why my GitHub Pages deploy failed (and it wasn't my fault)"`,
    not `"Some CI Notes"`).

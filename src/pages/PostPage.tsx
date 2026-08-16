@@ -32,9 +32,20 @@ export function PostPage() {
           <PanelHeader path={`GET /blog/${post.slug}`} />
           <div className="p-6 md:p-8">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-faint">
-              <span className={cn("flex items-center gap-1.5", CATEGORY_COLOR[meta.category])}>
-                <span className="status-dot" />
-                {meta.category}
+              <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                {meta.categories.map((category) => (
+                  <Link
+                    key={category}
+                    to={`/?cat=${category}`}
+                    className={cn(
+                      "flex items-center gap-1.5 transition-opacity hover:opacity-80",
+                      CATEGORY_COLOR[category]
+                    )}
+                  >
+                    <span className="status-dot" />
+                    {category}
+                  </Link>
+                ))}
               </span>
               <span>{formatDate(meta.date)}</span>
               <span>·</span>

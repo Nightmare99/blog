@@ -38,10 +38,8 @@ function Helix() {
   const strandB = useMemo(() => buildStrand(Math.PI), [])
 
   const rungColors = useMemo(() => {
-    const cats: Category[] =
-      posts.length > 0
-        ? posts.map((p) => p.meta.category)
-        : (Object.keys(CATEGORY_HEX) as Category[])
+    const flattened = posts.flatMap((p) => p.meta.categories)
+    const cats: Category[] = flattened.length > 0 ? flattened : (Object.keys(CATEGORY_HEX) as Category[])
     return Array.from({ length: TOTAL_POINTS }, (_, i) => CATEGORY_HEX[cats[i % cats.length]])
   }, [])
 

@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom"
 import { lazy, Suspense } from "react"
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowLeft, ArrowRight, Search, X } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { posts, CATEGORY_COLOR, formatDate } from "@/lib/posts"
+import {
+  posts as allPosts,
+  ALL_CATEGORIES,
+  CATEGORY_COLOR,
+  CATEGORY_CHIP_ACTIVE,
+  formatDate,
+} from "@/lib/posts"
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { usePostFilters } from "@/hooks/usePostFilters"
 
 const DnaHelix = lazy(() => import("@/components/scene/DnaHelix"))
 
@@ -26,7 +33,20 @@ function Helix({ className }: { className?: string }) {
 
 export function BlogIndex() {
   const isDesktop = useMediaQuery("(min-width: 1024px)")
-  const latest = posts[0]
+  const latest = allPosts[0]
+  const {
+    query,
+    activeCategories,
+    page,
+    totalPages,
+    posts,
+    totalMatches,
+    hasActiveFilters,
+    setQuery,
+    toggleCategory,
+    setPage,
+    clearFilters,
+  } = usePostFilters()
 
   return (
     <div className="relative">
@@ -97,12 +117,93 @@ export function BlogIndex() {
               >
                 <span className="status-dot text-signal-teal" />
                 <span>
-                  {posts.length} {posts.length === 1 ? "entry" : "entries"}{" "}
+                  {allPosts.length} {allPosts.length === 1 ? "entry" : "entries"}{" "}
                   indexed · latest {formatDate(latest.meta.date)}
                 </span>
               </motion.div>
 
-              <div className="mt-12 flex flex-col gap-4">
+              {/* Search + category filter */}
+              <motion.div
+                initial="hidden"
+                animate="show"
+                variants={fadeUp}
+                transition={{ duration: 0.7, delay: 0.42 }}
+                className="mt-9 flex flex-col gap-4"
+              >
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="search entries..."
+                    aria-label="Search entries"
+                    className="w-full rounded-sm border border-void-line bg-void-raised py-2.5 pl-9 pr-9 font-mono text-sm text-ink placeholder:text-ink-faint transition-colors focus:border-signal-teal/50 focus:outline-none focus:ring-1 focus:ring-signal-teal/30"
+                  />
+                  {query && (
+                    <button
+                      onClick={() => setQuery("")}
+                      aria-label="Clear search"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-faint transition-colors hover:text-signal-teal"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {ALL_CATEGORIES.map((category) => {
+                    const active = activeCategories.includes(category)
+                    return (
+                      <button
+                        key={category}
+                        onClick={() => toggleCategory(category)}
+                        aria-pressed={active}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-sm border px-2.5 py-1 font-mono text-xs transition-colors",
+                          active
+                            ? CATEGORY_CHIP_ACTIVE[category]
+                            : "border-void-line text-ink-muted hover:border-ink-faint hover:text-ink"
+                        )}
+                      >
+                        <span className={cn("status-dot", CATEGORY_COLOR[category])} />
+                        {category}
+                      </button>
+                    )
+                  })}
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="font-mono text-xs text-ink-faint underline-offset-2 transition-colors hover:text-signal-teal hover:underline"
+                    >
+                      clear
+                    </button>
+                  )}
+                </div>
+
+                {hasActiveFilters && (
+                  <p className="font-mono text-xs text-ink-faint">
+                    {totalMatches} {totalMatches === 1 ? "match" : "matches"}
+                  </p>
+                )}
+              </motion.div>
+
+              <div className="mt-8 flex flex-col gap-4">
+                {posts.length === 0 && (
+                  <div className="panel flex flex-col items-center gap-2 px-6 py-16 text-center">
+                    <span className="font-mono text-xs text-signal-rose">no matches</span>
+                    <p className="text-sm text-ink-muted">
+                      Nothing in the log matches that search or filter.
+                    </p>
+                    <button
+                      onClick={clearFilters}
+                      className="mt-2 font-mono text-xs text-signal-teal hover:underline"
+                    >
+                      clear filters
+                    </button>
+                  </div>
+                )}
+
                 {posts.map((post, index) => (
                   <motion.div
                     key={post.slug}
@@ -118,14 +219,16 @@ export function BlogIndex() {
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-faint">
-                            <span
-                              className={cn(
-                                "flex items-center gap-1.5",
-                                CATEGORY_COLOR[post.meta.category]
-                              )}
-                            >
-                              <span className="status-dot" />
-                              {post.meta.category}
+                            <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                              {post.meta.categories.map((category) => (
+                                <span
+                                  key={category}
+                                  className={cn("flex items-center gap-1.5", CATEGORY_COLOR[category])}
+                                >
+                                  <span className="status-dot" />
+                                  {category}
+                                </span>
+                              ))}
                             </span>
                             <span>{formatDate(post.meta.date)}</span>
                             <span>·</span>
@@ -154,6 +257,30 @@ export function BlogIndex() {
                   </motion.div>
                 ))}
               </div>
+
+              {totalPages > 1 && (
+                <div className="mt-10 flex items-center justify-between font-mono text-xs text-ink-faint">
+                  <button
+                    onClick={() => setPage(page - 1)}
+                    disabled={page <= 1}
+                    className="flex items-center gap-1.5 transition-colors hover:text-signal-teal disabled:pointer-events-none disabled:opacity-30"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    prev
+                  </button>
+                  <span>
+                    page {String(page).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
+                  </span>
+                  <button
+                    onClick={() => setPage(page + 1)}
+                    disabled={page >= totalPages}
+                    className="flex items-center gap-1.5 transition-colors hover:text-signal-teal disabled:pointer-events-none disabled:opacity-30"
+                  >
+                    next
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Right column: helix, desktop only, stays in view while the
