@@ -1,0 +1,127 @@
+export const meta = {
+  title: "Process vs execution: why it's time to shed the agile bloat",
+  date: "2026-08-15",
+  excerpt:
+    "When AI accelerates code execution by an order of magnitude, traditional SDLC ceremonies and bloated issue trackers become the single biggest bottleneck in engineering.",
+  tags: ["agile", "sdlc", "engineering-management", "ai", "productivity"],
+  categories: ["engineering"],
+  readTime: "5 min read",
+}
+
+Take this with a grain of salt — it's a hot take, but one born from watching modern workflows collide head-on with traditional software engineering process.
+
+Here is a sequence of events playing out in modern software teams every day: a tech lead or scrum master spends hours breaking an epic into stories, sizing them with story points, and assigning them across a sprint bucket. Then a developer opens an AI assistant, feeds it the context, and one-shots the deliverable in a single sitting.
+
+The story points said it was a sprint commitment. The actual execution took a fraction of an afternoon.
+
+## The agile circus
+
+When execution speed scales dramatically, the ceremony surrounding modern software development starts to look absurd.
+
+For years, software engineering teams have accumulated layers of administrative weight under the banner of "Agile":
+
+- **Story points & planning poker**: Estimating relative human effort using Fibonacci numbers.
+- **Hierarchical task taxonomies**: Epics, sub-epics, stories, sub-tasks, and custom issue types that take longer to categorize than to implement.
+- **Complex workflow state transitions**: Tickets moving through multi-stage pipelines from *Refinement* to *In Grooming* to *Ready for Dev* to *In QA*.
+- **Metrics as KPIs**: Burndown charts, velocity tracking, and cumulative flow diagrams designed to give management the illusion of deterministic control over a creative, non-linear discipline.
+
+Who is the clown in this scenario?
+
+Is it the **scrum master or tech lead** spending an entire day meticulously splitting tickets and estimating story points? The **agile practitioner** tweaking workflow transitions? Or the **engineering manager** demanding predictable velocity metrics and panicking when AI execution invalidates historical trends?
+
+There isn't a single clown — it's a circus, and everyone involved is doing their fair share of clownery to keep the machine running. We are spending high-value engineering hours feeding process machinery designed for an era when writing code was the primary bottleneck.
+
+## The inverted friction gap
+
+When writing, testing, and debugging code consumed the vast majority of a developer's day, spending a slice of the week on sprint planning, standups, backlog grooming, and estimation poker felt like an acceptable trade-off. Process was intended to bring structure to slow, manual execution.
+
+Now, AI tools handle boilerplate, generate tests, draft migrations, and refactor whole modules in seconds. The balance has shifted: building the feature takes minutes, but waiting for ticket grooming, sprint boundary commitments, PR approval gates, and multi-tier status changes takes days.
+
+<div className="panel my-8 overflow-hidden p-5 font-mono text-xs text-ink-muted">
+  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-void-line pb-3 mb-5">
+    <span className="data-label text-signal-teal">FIGURE 1.0 // THE INVERTED FRICTION GAP</span>
+    <span className="text-[10px] text-ink-faint">REPRESENTATIVE CYCLE TIME DISTRIBUTION</span>
+  </div>
+
+  <div className="space-y-6">
+    <div>
+      <div className="flex flex-wrap items-center justify-between gap-1 mb-2 text-xs">
+        <span className="font-semibold text-ink">Pre-AI Era</span>
+        <span className="text-[11px] text-ink-faint">Manual coding dominated cycle time</span>
+      </div>
+      <div className="flex h-9 w-full overflow-hidden rounded border border-void-line bg-void">
+        <div className="flex items-center justify-center bg-signal-amber/20 border-r border-signal-amber/40 px-2 text-signal-amber text-[11px] font-medium w-[20%] min-w-[70px]">
+          Process
+        </div>
+        <div className="flex items-center justify-center bg-signal-teal/20 text-signal-teal text-[11px] font-medium w-[80%]">
+          Code Execution &amp; Testing
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div className="flex flex-wrap items-center justify-between gap-1 mb-2 text-xs">
+        <span className="font-semibold text-ink">Post-AI Era</span>
+        <span className="text-[11px] text-ink-faint">Process becomes the primary bottleneck</span>
+      </div>
+      <div className="flex h-9 w-full overflow-hidden rounded border border-void-line bg-void">
+        <div className="flex items-center justify-center bg-signal-amber/30 border-r border-signal-amber/50 px-2 text-signal-amber text-[11px] font-semibold w-[80%]">
+          Process &amp; Admin Overhead
+        </div>
+        <div className="flex items-center justify-center bg-signal-teal/35 text-signal-teal text-[11px] font-medium w-[20%] min-w-[70px]">
+          AI Exec
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-void-line pt-3 text-[11px] text-ink-faint">
+    <div className="flex items-center gap-3">
+      <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-signal-amber" /> Process Overhead</span>
+      <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-signal-teal" /> Code Execution</span>
+    </div>
+    <span>Relative proportion inverted</span>
+  </div>
+</div>
+
+The software development lifecycle (SDLC) process is now far slower than the execution itself.
+
+## So kill issue tracking? Not quite.
+
+It is tempting to react by wanting to burn down task management altogether and embrace total chaos. But that misses the point.
+
+For any team operating across non-trivial systems, task visibility remains essential. You need to know who is working on what, prevent duplicate effort, maintain shared context across dependencies, and record decisions. The task board itself isn't the problem.
+
+The problem is the **bloat attached to the board**.
+
+## Stripping the process down to primitives
+
+If we re-engineered the software development process today around high-velocity, AI-assisted execution, what weight would we shed?
+
+### 1. Kill story points and capacity planning
+Story points were meant to abstract complexity and time. But when an LLM resolves an architectural refactor in minutes because the specification was crisp, but stalls on an environment bug for days, relative sizing collapses.
+
+Track **state**, not arbitrary effort points. Work is either unstarted, in progress, blocked, or done.
+
+### 2. Collapse task hierarchy
+You do not need epics, initiatives, themes, stories, and sub-tasks to build software. Most of that hierarchy exists to satisfy middle-management reporting, not developer productivity.
+
+A task model needs to be remarkably flat:
+- A title and clear description.
+- A status and priority.
+- An assignee and a reporter.
+- Tags for grouping and asynchronous comments for context.
+
+Everything else is noise.
+
+### 3. Replace ceremonies with asynchronous context
+Hours spent in sprint planning debating ticket estimates is wasted time. That time is far better spent writing rich, clear specifications and architectural context — inputs that both human engineers and AI tools can directly consume to ship software immediately.
+
+### 4. Continuous flow over artificial sprint boundaries
+Batching work into arbitrary sprint containers is an artifact of slow deployment pipelines and manual testing cycles. In a high-velocity environment, work should move continuously from backlog to production without waiting for the next sprint ritual to start.
+
+## Unblocked execution
+
+Task management tools should be lightweight coordination engines, not administrative burdens. They should exist to log work, signal blockers, and share context across engineers and automated tools concurrently — nothing more.
+
+Process should enable execution, not stall it. It's time to drop the poker chips, collapse the multi-tier backlogs, and get back to building.
