@@ -4,4 +4,5 @@ dist-ssr
 *.local
 .DS_Store
 .obsidian/
-.clanker/
+.clanker/conversations/
+.clanker/memories/
