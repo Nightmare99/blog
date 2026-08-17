@@ -1,5 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom"
 import { motion } from "framer-motion"
+import { Pin } from "lucide-react"
 import { PanelHeader } from "@/components/ui/panel-header"
 import { Badge } from "@/components/ui/badge"
 import { getPost, CATEGORY_COLOR, formatDate } from "@/lib/posts"
@@ -32,6 +33,12 @@ export function PostPage() {
           <PanelHeader path={`GET /blog/${post.slug}`} />
           <div className="p-6 md:p-8">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-faint">
+              {meta.pinned && (
+                <span className="flex items-center gap-1 text-signal-teal">
+                  <Pin className="h-3 w-3 fill-current" />
+                  pinned
+                </span>
+              )}
               <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
                 {meta.categories.map((category) => (
                   <Link

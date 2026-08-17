@@ -9,6 +9,8 @@ export interface PostMeta {
   tags: string[]
   categories: Category[]
   readTime: string
+  /** Pinned posts always sit in a separate section above the paginated list. */
+  pinned?: boolean
 }
 
 export interface PostEntry {

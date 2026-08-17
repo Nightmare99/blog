@@ -23,6 +23,7 @@ export const meta = {
   tags: ["github-actions", "ci-cd", "postmortem"],   // free-form, unlimited
   categories: ["engineering"],      // controlled vocabulary, see below — can have more than one
   readTime: "3 min read",           // rough eyeball: ~200 words/min
+  // pinned: true,                  // optional — see "Pinning" below. Omit for a normal post.
 }
 ```
 
@@ -62,6 +63,19 @@ All three are handled by the index page automatically (`src/hooks/usePostFilters
 6 posts per page. The one thing that affects how well a post surfaces
 there is writing an accurate `excerpt` and a few real `tags` — both are
 part of what search matches against.
+
+### Pinning
+
+Set `pinned: true` to keep a post in its own section at the top of the
+index, above the paginated list, on every page — it's for things worth
+surfacing regardless of how far back they were written (this "What this
+space is" post is pinned as the standing intro). Pinned posts still
+respect the active search/category filter — they're exempt from
+pagination, not from filtering. The section is collapsible (state
+persists in the visitor's browser via `localStorage`, not per post).
+
+Use it sparingly — one or two posts, not a growing list. If everything
+is pinned, nothing is.
 
 ## 3. Body
 

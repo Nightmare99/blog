@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom"
 import { lazy, Suspense } from "react"
 import { motion } from "framer-motion"
 import { ArrowLeft, ArrowRight, Search, X } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { PostCard } from "@/components/PostCard"
+import { PinnedSection } from "@/components/PinnedSection"
 import {
   posts as allPosts,
   ALL_CATEGORIES,
@@ -39,6 +39,7 @@ export function BlogIndex() {
     activeCategories,
     page,
     totalPages,
+    pinnedPosts,
     posts,
     totalMatches,
     hasActiveFilters,
@@ -188,74 +189,29 @@ export function BlogIndex() {
                 )}
               </motion.div>
 
-              <div className="mt-8 flex flex-col gap-4">
-                {posts.length === 0 && (
-                  <div className="panel flex flex-col items-center gap-2 px-6 py-16 text-center">
-                    <span className="font-mono text-xs text-signal-rose">no matches</span>
-                    <p className="text-sm text-ink-muted">
-                      Nothing in the log matches that search or filter.
-                    </p>
-                    <button
-                      onClick={clearFilters}
-                      className="mt-2 font-mono text-xs text-signal-teal hover:underline"
-                    >
-                      clear filters
-                    </button>
-                  </div>
-                )}
+              <div className="mt-8">
+                <PinnedSection posts={pinnedPosts} />
 
-                {posts.map((post, index) => (
-                  <motion.div
-                    key={post.slug}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.5, delay: index * 0.06 }}
-                  >
-                    <Link
-                      to={`/${post.slug}`}
-                      className="panel panel-hover group block p-6 transition-transform duration-300 hover:-translate-y-0.5"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-faint">
-                            <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                              {post.meta.categories.map((category) => (
-                                <span
-                                  key={category}
-                                  className={cn("flex items-center gap-1.5", CATEGORY_COLOR[category])}
-                                >
-                                  <span className="status-dot" />
-                                  {category}
-                                </span>
-                              ))}
-                            </span>
-                            <span>{formatDate(post.meta.date)}</span>
-                            <span>·</span>
-                            <span>{post.meta.readTime}</span>
-                            <span className="ml-auto text-ink-faint">
-                              #{String(post.seq).padStart(3, "0")}
-                            </span>
-                          </div>
-                          <h2 className="mt-2 flex items-center gap-2 text-lg font-semibold text-ink transition-colors group-hover:text-signal-teal">
-                            {post.meta.title}
-                            <ArrowRight className="h-4 w-4 shrink-0 -translate-x-1 text-signal-teal opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
-                          </h2>
-                          <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
-                            {post.meta.excerpt}
-                          </p>
-                          <div className="mt-4 flex flex-wrap gap-1.5">
-                            {post.meta.tags.map((tag) => (
-                              <Badge key={tag} variant="secondary">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
+                <div className="flex flex-col gap-4">
+                  {pinnedPosts.length === 0 && posts.length === 0 && (
+                    <div className="panel flex flex-col items-center gap-2 px-6 py-16 text-center">
+                      <span className="font-mono text-xs text-signal-rose">no matches</span>
+                      <p className="text-sm text-ink-muted">
+                        Nothing in the log matches that search or filter.
+                      </p>
+                      <button
+                        onClick={clearFilters}
+                        className="mt-2 font-mono text-xs text-signal-teal hover:underline"
+                      >
+                        clear filters
+                      </button>
+                    </div>
+                  )}
+
+                  {posts.map((post, index) => (
+                    <PostCard key={post.slug} post={post} index={index} />
+                  ))}
+                </div>
               </div>
 
               {totalPages > 1 && (

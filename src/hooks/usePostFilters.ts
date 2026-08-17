@@ -34,9 +34,14 @@ export function usePostFilters() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, activeKey])
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  // Pinned posts sit outside pagination entirely — they're shown in full,
+  // on every page, and excluded from the regular (paginated) list below.
+  const pinnedPosts = filtered.filter((p) => p.meta.pinned)
+  const regularPosts = filtered.filter((p) => !p.meta.pinned)
+
+  const totalPages = Math.max(1, Math.ceil(regularPosts.length / PAGE_SIZE))
   const page = Math.min(requestedPage, totalPages)
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const paged = regularPosts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   function updateParams(mutate: (params: URLSearchParams) => void) {
     const params = new URLSearchParams(searchParams)
@@ -79,6 +84,7 @@ export function usePostFilters() {
     activeCategories,
     page,
     totalPages,
+    pinnedPosts,
     posts: paged,
     totalMatches: filtered.length,
     hasActiveFilters: query.length > 0 || activeCategories.length > 0,
