@@ -10,26 +10,26 @@ interface PanelHeaderProps {
 
 /**
  * Terminal/HTTP-request-styled chrome used atop each panel — the same
- * conceit as the main portfolio site, where every screen reads as a
- * route being inspected.
+ * conceit, and the exact same sticker treatment, as the main portfolio
+ * site: every screen reads as a route being inspected.
  */
 export function PanelHeader({ path, status = "200 OK", className }: PanelHeaderProps) {
   return (
     <div
       className={cn(
-        "flex items-center justify-between border-b border-void-line px-4 py-2.5 font-mono text-xs",
+        "flex items-center justify-between border-b-2 border-void-line bg-signal-lime px-4 py-2.5 font-mono text-xs text-void",
         className
       )}
     >
-      <div className="flex items-center gap-2 text-ink-muted min-w-0">
+      <div className="flex min-w-0 items-center gap-2">
         <span className="flex shrink-0 gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-signal-rose/70" />
-          <span className="h-2.5 w-2.5 rounded-full bg-signal-amber/70" />
-          <span className="h-2.5 w-2.5 rounded-full bg-signal-teal/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-void/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-void/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-void/70" />
         </span>
-        <span className="ml-2 truncate text-ink-faint">{path}</span>
+        <span className="ml-2 truncate font-semibold">{path}</span>
       </div>
-      <span className="shrink-0 text-signal-teal/80">{status}</span>
+      <span className="shrink-0 font-semibold">{status}</span>
     </div>
   )
 }

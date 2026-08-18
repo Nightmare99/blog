@@ -15,10 +15,10 @@ export function PinnedSection({ posts }: { posts: PostEntry[] }) {
       <button
         onClick={() => setCollapsed((c) => !c)}
         aria-expanded={!collapsed}
-        className="flex w-full items-center justify-between gap-3 rounded-sm border border-void-line bg-void-raised px-4 py-2.5 transition-colors hover:border-signal-teal/30"
+        className="flex w-full items-center justify-between gap-3 border-2 border-void-line bg-void-raised px-4 py-2.5 shadow-brutal-sm transition-transform duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal"
       >
         <span className="flex items-center gap-2.5">
-          <Pin className="h-3.5 w-3.5 text-signal-teal" />
+          <Pin className="h-3.5 w-3.5 text-signal-lime" />
           <span className="data-label">pinned</span>
           <span className="font-mono text-xs text-ink-faint">· {posts.length}</span>
         </span>

@@ -15,29 +15,43 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        sans: ['Victor Mono', 'ui-monospace', 'monospace'],
+        mono: ['Victor Mono', 'ui-monospace', 'monospace'],
       },
       colors: {
-        // System-map signal palette — shared with the main portfolio site
+        // Neo-brutalist system-map palette — shared with the main portfolio site
         void: {
-          DEFAULT: "#0A0D12",
-          deep: "#05070A",
-          raised: "#10141C",
-          line: "#1C2230",
+          DEFAULT: "#0E0E10",
+          deep: "#08080A",
+          raised: "#1C1C1F",
+          line: "#F5F1E8",
         },
         signal: {
-          teal: "#5EEAD4",
-          blue: "#7C9CFF",
+          // Chrome/primary
+          lime: "#CCFF00",
+          // Category + accent set
+          cyan: "#00F0FF",
+          pink: "#FF2E9B",
           amber: "#FFB454",
-          rose: "#FF6B81",
           violet: "#B9A2FF",
         },
         ink: {
-          DEFAULT: "#E7ECF3",
-          muted: "#8B93A7",
-          faint: "#586178",
+          DEFAULT: "#F5F1E8",
+          muted: "#B5AFA6",
+          faint: "#77726B",
         },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "var(--radius)",
+        sm: "var(--radius)",
+      },
+      boxShadow: {
+        brutal: "6px 6px 0 0 #F5F1E8",
+        "brutal-sm": "4px 4px 0 0 #F5F1E8",
+        "brutal-lg": "8px 8px 0 0 #F5F1E8",
+        "brutal-lime": "6px 6px 0 0 #CCFF00",
+        "brutal-press": "2px 2px 0 0 #F5F1E8",
       },
       keyframes: {
         "fade-in": {

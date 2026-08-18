@@ -3,8 +3,8 @@ import { Link } from "react-router-dom"
 export function NotFound() {
   return (
     <section className="container mx-auto flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-      <span className="font-mono text-xs text-signal-rose">404 NOT FOUND</span>
-      <h1 className="mt-3 text-2xl font-semibold text-ink">
+      <span className="font-mono text-xs font-semibold text-signal-pink">404 NOT FOUND</span>
+      <h1 className="mt-3 text-2xl font-bold text-ink">
         No entry at this route<span className="caret" />
       </h1>
       <p className="mt-3 max-w-sm text-ink-muted">
@@ -12,7 +12,7 @@ export function NotFound() {
       </p>
       <Link
         to="/"
-        className="mt-6 font-mono text-sm text-signal-teal hover:underline"
+        className="mt-6 font-mono text-sm font-semibold text-signal-lime hover:underline"
       >
         ← back to /blog
       </Link>

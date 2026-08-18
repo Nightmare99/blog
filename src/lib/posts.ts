@@ -49,18 +49,26 @@ export function getPost(slug: string): PostEntry | undefined {
 export const ALL_CATEGORIES: Category[] = ["engineering", "notes", "career", "personal"]
 
 export const CATEGORY_COLOR: Record<Category, string> = {
-  engineering: "text-signal-teal",
-  notes: "text-signal-blue",
+  engineering: "text-signal-cyan",
+  notes: "text-signal-violet",
   career: "text-signal-amber",
-  personal: "text-signal-violet",
+  personal: "text-signal-pink",
 }
 
 /** Literal (non-templated) class strings so Tailwind's content scanner picks them up. */
 export const CATEGORY_CHIP_ACTIVE: Record<Category, string> = {
-  engineering: "border-signal-teal/50 bg-signal-teal/10 text-signal-teal",
-  notes: "border-signal-blue/50 bg-signal-blue/10 text-signal-blue",
-  career: "border-signal-amber/50 bg-signal-amber/10 text-signal-amber",
-  personal: "border-signal-violet/50 bg-signal-violet/10 text-signal-violet",
+  engineering: "border-void-line bg-signal-cyan text-void shadow-brutal-sm",
+  notes: "border-void-line bg-signal-violet text-void shadow-brutal-sm",
+  career: "border-void-line bg-signal-amber text-void shadow-brutal-sm",
+  personal: "border-void-line bg-signal-pink text-void shadow-brutal-sm",
+}
+
+/** Literal solid-fill classes for the category distribution bars on the index. */
+export const CATEGORY_FILL: Record<Category, string> = {
+  engineering: "bg-signal-cyan",
+  notes: "bg-signal-violet",
+  career: "bg-signal-amber",
+  personal: "bg-signal-pink",
 }
 
 export function formatDate(iso: string): string {

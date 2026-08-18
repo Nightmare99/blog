@@ -19,7 +19,7 @@ export function PostPage() {
       <div className="container mx-auto max-w-3xl px-4 md:px-8">
         <Link
           to="/"
-          className="mb-8 inline-flex items-center gap-1.5 font-mono text-xs text-ink-muted transition-colors hover:text-signal-teal"
+          className="mb-8 inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-ink-muted transition-colors hover:text-signal-lime"
         >
           ← /blog
         </Link>
@@ -34,7 +34,7 @@ export function PostPage() {
           <div className="p-6 md:p-8">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-faint">
               {meta.pinned && (
-                <span className="flex items-center gap-1 text-signal-teal">
+                <span className="flex items-center gap-1 text-signal-lime">
                   <Pin className="h-3 w-3 fill-current" />
                   pinned
                 </span>
@@ -59,7 +59,7 @@ export function PostPage() {
               <span>{meta.readTime}</span>
               <span className="ml-auto">#{String(post.seq).padStart(3, "0")}</span>
             </div>
-            <h1 className="mt-4 text-2xl font-semibold tracking-tight text-ink md:text-3xl">
+            <h1 className="mt-4 text-2xl font-bold tracking-tight text-ink md:text-3xl">
               {meta.title}
             </h1>
             <div className="mt-4 flex flex-wrap gap-1.5">
@@ -76,8 +76,8 @@ export function PostPage() {
           <Component />
         </div>
 
-        <div className="mt-16 flex items-center justify-between border-t border-void-line pt-6 font-mono text-xs text-ink-faint">
-          <Link to="/" className="transition-colors hover:text-signal-teal">
+        <div className="mt-16 flex items-center justify-between border-t-2 border-void-line pt-6 font-mono text-xs text-ink-faint">
+          <Link to="/" className="font-semibold transition-colors hover:text-signal-lime">
             ← back to log
           </Link>
           <span>EOF</span>

@@ -41,10 +41,10 @@ in `CATEGORY_COLOR` and `CATEGORY_CHIP_ACTIVE` in `src/lib/posts.ts`.
 
 | category      | color   | for |
 |---------------|---------|-----|
-| `engineering` | teal    | technical write-ups, postmortems, build notes |
-| `notes`       | blue    | shorter observations, TILs, things that don't need a full write-up |
+| `engineering` | cyan    | technical write-ups, postmortems, build notes |
+| `notes`       | violet  | shorter observations, TILs, things that don't need a full write-up |
 | `career`      | amber   | work reflections, project retrospectives, lessons from a role |
-| `personal`    | violet  | updates, feelings, memories — non-work entries |
+| `personal`    | pink    | updates, feelings, memories — non-work entries |
 
 Most posts should have exactly one. Give a post two only when it
 genuinely straddles both — e.g. `["career", "personal"]` for a reflection

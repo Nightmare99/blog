@@ -29,14 +29,14 @@ export function PostCard({ post, index = 0, pinned = false }: PostCardProps) {
         {pinned && (
           <span
             aria-hidden
-            className="absolute inset-y-2 left-2 w-1 rounded-full bg-signal-teal/60"
+            className="absolute inset-y-2 left-2 w-1 bg-signal-lime"
           />
         )}
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-faint">
               {pinned && (
-                <span className="flex items-center gap-1 text-signal-teal">
+                <span className="flex items-center gap-1 text-signal-lime">
                   <Pin className="h-3 w-3 fill-current" />
                 </span>
               )}
@@ -58,9 +58,9 @@ export function PostCard({ post, index = 0, pinned = false }: PostCardProps) {
                 #{String(post.seq).padStart(3, "0")}
               </span>
             </div>
-            <h2 className="mt-2 flex items-center gap-2 text-lg font-semibold text-ink transition-colors group-hover:text-signal-teal">
+            <h2 className="mt-2 flex items-center gap-2 text-lg font-bold text-ink transition-colors group-hover:text-signal-cyan">
               {post.meta.title}
-              <ArrowRight className="h-4 w-4 shrink-0 -translate-x-1 text-signal-teal opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+              <ArrowRight className="h-4 w-4 shrink-0 -translate-x-1 text-signal-cyan opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
             </h2>
             <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{post.meta.excerpt}</p>
             <div className="mt-4 flex flex-wrap gap-1.5">

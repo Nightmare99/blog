@@ -4,15 +4,15 @@ import { posts } from "@/lib/posts"
 
 export function Nav() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-void-line bg-void/85 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 border-b-2 border-void-line bg-void">
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex h-14 items-center justify-between">
           <Link
             to="/"
             className="group flex items-center gap-2.5 font-mono text-sm text-ink"
           >
-            <span className="status-dot text-signal-teal" />
-            <span className="font-semibold tracking-tight">vishal.kumar</span>
+            <span className="status-dot text-signal-lime" />
+            <span className="font-bold tracking-tight">vishal.kumar</span>
             <span className="text-ink-faint">/blog</span>
           </Link>
 
@@ -22,7 +22,7 @@ export function Nav() {
             </span>
             <a
               href="https://nightmare99.github.io/"
-              className="flex items-center gap-1.5 font-mono text-xs text-ink-muted transition-colors hover:text-signal-teal"
+              className="flex items-center gap-1.5 font-mono text-xs font-semibold text-ink-muted transition-colors hover:text-signal-lime"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               portfolio
