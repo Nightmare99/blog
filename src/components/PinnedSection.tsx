@@ -40,7 +40,7 @@ export function PinnedSection({ posts }: { posts: PostEntry[] }) {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div className="flex flex-col gap-4 pt-4">
+            <div className="grid grid-cols-1 gap-4 pt-4 md:grid-cols-2">
               {posts.map((post, i) => (
                 <PostCard key={post.slug} post={post} index={i} pinned />
               ))}

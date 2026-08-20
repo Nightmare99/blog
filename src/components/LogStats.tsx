@@ -5,9 +5,10 @@ import { cn } from "@/lib/utils"
 /**
  * Replaces the old DNA helix. Same underlying idea — a glanceable read of
  * how the log breaks down by category — translated into a flat terminal
- * readout instead of a 3D scene, to match the brutalist redesign.
+ * readout instead of a 3D scene, to match the brutalist redesign. Sits
+ * next to the header block as a matched pair, not down the whole page.
  */
-export function LogStats({ posts }: { posts: PostEntry[] }) {
+export function LogStats({ posts, className }: { posts: PostEntry[]; className?: string }) {
   const latest = posts[0]
   const pinnedCount = posts.filter((p) => p.meta.pinned).length
   const breakdown = ALL_CATEGORIES.map((category) => ({
@@ -17,9 +18,9 @@ export function LogStats({ posts }: { posts: PostEntry[] }) {
   const maxCount = Math.max(1, ...breakdown.map((b) => b.count))
 
   return (
-    <div className="panel overflow-hidden">
+    <div className={cn("panel flex h-full flex-col overflow-hidden", className)}>
       <PanelHeader path="GET /blog/stats" />
-      <div className="p-6">
+      <div className="flex flex-1 flex-col justify-between p-6">
         <div className="flex items-end justify-between border-b-2 border-void-line pb-5">
           <span className="text-5xl font-bold leading-none tracking-tight text-ink">
             {String(posts.length).padStart(2, "0")}
